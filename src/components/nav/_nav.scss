@@ -1,0 +1,26 @@
+@import '../../utils/_variables.scss';
+
+.c_nav {
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+  ul {
+    display: flex;
+    list-style: none;
+    li {
+      margin: 0 0.6em;
+      a {
+        color: $yellow;
+        &:focus {
+          outline: 2px solid $orange;
+        }
+        @media (min-width: $break--med) {
+          transition: color 150ms ease;
+          &:hover {
+            color: #fff;
+          }
+        }
+      }
+    }
+  }
+}

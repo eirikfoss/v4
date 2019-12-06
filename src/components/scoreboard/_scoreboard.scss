@@ -1,0 +1,37 @@
+@import "../../utils/_variables.scss";
+
+.c_score {
+  font-size: 150px;
+}
+
+.c_center {
+  margin-top: 10%;
+}
+
+.box {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
+
+.p_fill {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: lightgrey;
+}
+
+.c_button {
+  padding: 5rem;
+  height: 10rem;
+  width: 20rem;
+  margin: 4rem;
+}
+
+.c_button p {
+  font-size: 40px;
+  margin: 0;
+  padding: 0;
+}

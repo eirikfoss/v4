@@ -1,0 +1,13 @@
+@import '../../utils/_variables.scss';
+
+.t_no-match {
+  text-align: center;
+  h2{
+    color: $orange;
+    font-size: 4em;
+  }
+  h2,
+  h3 {
+    margin-bottom: 1em;
+  }
+}

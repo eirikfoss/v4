@@ -1,0 +1,19 @@
+@import "../../utils/_variables.scss";
+
+.c_score {
+  font-size: 150px;
+}
+
+.c_center {
+  margin-top: 10%;
+  background: lightslategray;
+}
+
+.p_fill {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: lightgrey;
+}
