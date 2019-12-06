@@ -10,12 +10,12 @@ router.route("/").get((req, res) => {
 router.route("/add").post((req, res) => {
   const teams = req.body.teams;
   const location = req.body.location;
-  const score = req.body.score;
+  const matchOver = req.body.matchOver;
 
   const newMatch = new Match({
     teams,
     location,
-    score
+    matchOver
   });
 
   newMatch
@@ -38,7 +38,7 @@ router.route("/:id").delete((req, res) => {
 
 router.route("/update/:id").post((req, res) => {
   Match.findById(req.params.id).then(match => {
-    match.score = req.body.score;
+    match.teams = req.body.teams;
 
     match
       .save()

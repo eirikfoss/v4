@@ -2,7 +2,11 @@ import React from "react";
 import "./_playerCard.scss";
 
 const PlayerCard = props => {
-  const { username } = props.player;
+  const { id, getPlayerById } = props;
+  let playerTmp = { username: "Bobo", stats: { rating: 1500 } };
+
+  const player = getPlayerById(id) ? getPlayerById(id) : playerTmp;
+
   return (
     <div className="card c_margin" style={{ width: "12rem" }}>
       <img
@@ -11,7 +15,9 @@ const PlayerCard = props => {
         alt="..."
       />
       <div className="card-body">
-        <h5 className="card-title">{username}</h5>
+        <h5 className="card-title">{player.username}</h5>
+        <p>Rating: {player.stats.rating}</p>
+        <p>{}</p>
       </div>
     </div>
   );

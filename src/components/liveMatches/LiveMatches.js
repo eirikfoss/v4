@@ -1,10 +1,12 @@
 import React from "react";
 
-const Match = match => {
+const Match = props => {
+  let blueScore = props.teams.blue.score;
+  let redScore = props.teams.red.score;
   return (
     <tr>
       <td>
-        {match.location} {match.score[0]} - {match.score[1]}
+        {props.location} {blueScore} - {redScore}
       </td>
     </tr>
   );
@@ -17,40 +19,24 @@ const LiveMatches = props => {
     return liveMatches.map(currentMatch => {
       return (
         <Match
-          key={currentMatch._id}
           location={currentMatch.location}
-          score={currentMatch.score}
+          teams={currentMatch.teams}
+          key={currentMatch._id}
         />
       );
     });
   };
 
   return (
-    <div>
-      <div className="container">
-        <div className="row">
-          <div className="col-sm">
-            <table className="table">
-              <thead className="thead-light">
-                <tr>
-                  <th>Matches</th>
-                </tr>
-              </thead>
-              <tbody>{renderMatchList()}</tbody>
-            </table>
-          </div>
-          <div className="col-sm">
-            <table className="table">
-              <thead className="thead-light">
-                <tr>
-                  <th>Players</th>
-                </tr>
-              </thead>
-              <tbody>{renderMatchList()}</tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+    <div className="col-6">
+      <table className="table">
+        <thead className="thead-light">
+          <tr>
+            <th>Matches</th>
+          </tr>
+        </thead>
+        <tbody>{renderMatchList()}</tbody>
+      </table>
     </div>
   );
 };

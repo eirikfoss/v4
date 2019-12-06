@@ -9,10 +9,10 @@ router.route("/").get((req, res) => {
 
 router.route("/add").post((req, res) => {
   const username = req.body.username;
-  const rating = Number(req.body.rating);
+  const stats = req.body.stats;
   const matches = req.body.matches;
 
-  const newPlayer = new Player({ username, rating, matches });
+  const newPlayer = new Player({ username, stats, matches });
 
   newPlayer
     .save()
@@ -29,7 +29,7 @@ router.route("/:id").get((req, res) => {
 router.route("/update/:id").post((req, res) => {
   Player.findById(req.params.id).then(player => {
     player.matches = req.body.matches;
-    console.log(req.body);
+    player.stats = req.body.stats;
 
     player
       .save()

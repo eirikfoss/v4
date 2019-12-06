@@ -5,8 +5,8 @@ const Schema = mongoose.Schema;
 const matchSchema = new Schema(
   {
     location: { type: String, required: true },
-    teams: { type: Array, required: true },
-    score: { type: Array, required: true }
+    teams: { type: Object, required: true },
+    matchOver: { type: Boolean, required: true }
   },
   { timestamps: true }
 );

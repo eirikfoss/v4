@@ -9,42 +9,25 @@ function getPlayersFromDb() {
   axios
     .get(playerAPI)
     .then(response => {
-      this.setState({ playerList: response.data });
+      let playerList = response.data;
+      let playerListIds = [];
+      for (let i = 0; i < response.data.length; i++) {
+        playerListIds.push(playerList[i]._id);
+      }
+      this.setState({ playerList, playerListIds });
     })
     .catch(error => {
       console.log(error);
     });
 }
 
-function updatePlayerDb(bluePlayers, redPlayers, blueScore, redScore) {
-  const scoreDifference = blueScore - redScore;
+function sendPlayerUpdateToDb(player, adjustment) {
+  const url = playerAPI + "update/" + player._id;
 
-  //Saving matches as the score difference
-  for (let i = 0; i < 2; i++) {
-    const urlB = playerAPI + "update/" + bluePlayers[i]._id;
-    const urlR = playerAPI + "update/" + redPlayers[i]._id;
-
-    let newResultListB = bluePlayers[i].matches;
-    let newResultListR = redPlayers[i].matches;
-
-    newResultListB.push(scoreDifference);
-    newResultListR.push(-scoreDifference);
-
-    const payloadB = { matches: newResultListB };
-    const payloadR = { matches: newResultListR };
-
-    sendPlayerUpdateToDb(urlB, payloadB);
-    sendPlayerUpdateToDb(urlR, payloadR);
-
-    console.log(payloadB);
-  }
-}
-
-function sendPlayerUpdateToDb(url, payload) {
   axios
-    .post(url, payload)
+    .post(url, player)
     .then(response => {
-      console.log(response);
+      console.log(player.stats.rating, adjustment);
     })
     .catch(error => {
       console.log(error);
@@ -56,6 +39,17 @@ function getListOfMatches() {
     .get("http://localhost:5000/matches/")
     .then(response => {
       this.setState({ liveMatches: response.data });
+    })
+    .catch(error => {
+      console.log(error);
+    });
+}
+
+function getPrevMatches() {
+  axios
+    .get("http://localhost:5000/prevmatches/")
+    .then(response => {
+      this.setState({ prevMatches: response.data });
     })
     .catch(error => {
       console.log(error);
@@ -85,17 +79,13 @@ function getLocationMatchFromDb(location) {
 }
 
 function updateMatchInDb(newMatchData) {
-  const score = newMatchData.score;
   const id = this.state.matchData._id;
   const url = "http://localhost:5000/matches/update/" + id;
-  let payload = { score: [] };
-  payload.score = score;
 
   axios
-    .post(url, payload)
+    .post(url, newMatchData)
     .then(response => {
       socket.emit("goal");
-      console.log("Match has been updated");
     })
     .catch(error => {
       console.log(error);
@@ -129,7 +119,8 @@ export {
   getPlayersFromDb,
   getListOfMatches,
   getLocationMatchFromDb,
+  getPrevMatches,
   updateMatchInDb,
-  updatePlayerDb,
-  sendToPrevMatches
+  sendToPrevMatches,
+  sendPlayerUpdateToDb
 };

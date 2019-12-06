@@ -5,20 +5,21 @@ import axios from "axios";
 const SelectPlayers = props => {
   let {
     location,
-    playerList,
+    playerListIds,
     chosenPlayerList,
     updateChosenPlayers,
+    getPlayerById,
     startGame
   } = props;
 
   //create a list of players from the db
   const renderPlayers = () => {
-    return playerList.map(currentPlayer => {
+    return playerListIds.map(currentPlayer => {
       return (
         <Player
           chosen={() => handleChosenPlayer(currentPlayer)}
-          player={currentPlayer}
-          key={currentPlayer._id}
+          player={getPlayerById(currentPlayer)}
+          key={currentPlayer}
         />
       );
     });
@@ -30,8 +31,8 @@ const SelectPlayers = props => {
       return (
         <Player
           chosen={() => handleChosenPlayer(currentPlayer)}
-          player={currentPlayer}
-          key={currentPlayer._id}
+          player={getPlayerById(currentPlayer)}
+          key={currentPlayer}
         />
       );
     });
@@ -40,7 +41,7 @@ const SelectPlayers = props => {
   //Move chosen player from one list to the other
   const handleChosenPlayer = player => {
     let cList = chosenPlayerList;
-    let pList = playerList;
+    let pList = playerListIds;
 
     if (pList.includes(player)) {
       if (cList.length <= 3) {
@@ -63,25 +64,26 @@ const SelectPlayers = props => {
   };
 
   const sendPlayers = () => {
-    let blueTeam = [];
-    let redTeam = [];
-    let teams = [];
-    let score = [0, 0];
+    let teams = {
+      blue: { players: [], score: 0 },
+      red: { players: [], score: 0 }
+    };
+    let matchOver = false;
 
     if (chosenPlayerList.length === 4) {
       for (let i = 0; i < 2; i++) {
-        blueTeam.push(chosenPlayerList[i]);
+        teams.blue.players.push(chosenPlayerList[i]);
       }
-      teams.push(blueTeam);
+
       for (let i = 2; i < 4; i++) {
-        redTeam.push(chosenPlayerList[i]);
+        teams.red.players.push(chosenPlayerList[i]);
       }
-      teams.push(redTeam);
 
       axios
-        .post("http://localhost:5000/matches/add/", { teams, location, score })
-        .then(response => {
-          console.log(response.data);
+        .post("http://localhost:5000/matches/add/", {
+          teams,
+          location,
+          matchOver
         })
         .then(startGame())
         .catch(error => {

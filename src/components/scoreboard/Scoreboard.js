@@ -3,31 +3,77 @@ import "./_scoreboard.scss";
 import PlayerCard from "../playerCard/PlayerCard";
 
 const Scoreboard = props => {
-  const { matchData, updateScore } = props;
+  const {
+    matchData,
+    updateScore,
+    playerList,
+    getPlayerById,
+    toggleMatchActive,
+    calculateRatingAdjustment,
+    ratingAdjustment
+  } = props;
   const { teams } = props.matchData;
 
   async function onKeyPressed(e) {
-    let newScore = [...matchData.score];
-    let newMatchData = { ...matchData };
-    if (e.type === "click") {
-      newScore[0]++;
-    } else if (e.type === "contextmenu") {
-      newScore[1]++;
-    }
-    newMatchData.score = newScore;
+    let newMatchData = matchData;
 
-    await updateScore(newMatchData);
+    if (!matchData.matchOver) {
+      if (e.type === "click") {
+        newMatchData.teams.blue.score++;
+      } else if (e.type === "contextmenu") {
+        newMatchData.teams.red.score++;
+      }
+
+      if (
+        newMatchData.teams.blue.score === 10 ||
+        newMatchData.teams.red.score === 10
+      ) {
+        //Match is over
+        newMatchData.matchOver = true;
+        //calculate new ratings
+        newMatchData.ratingAdjustment = calculateRatingAdjustment(newMatchData);
+      }
+
+      await updateScore(newMatchData);
+    }
   }
 
-  const renderTeam = i => {
-    let player = teams[i];
+  const renderTeam = team => {
+    let t = team === "blue" ? teams.blue : teams.red;
 
     return (
       <div className="d-flex justify-content-center">
-        <PlayerCard player={player[0]} />
-        <PlayerCard player={player[1]} />
+        <PlayerCard
+          id={t.players[0]}
+          playerList={playerList}
+          getPlayerById={getPlayerById}
+        />
+        <PlayerCard
+          id={t.players[1]}
+          playerList={playerList}
+          getPlayerById={getPlayerById}
+        />
       </div>
     );
+  };
+
+  const renderNewMatchOptions = (matchOver, toggleMatchActive) => {
+    if (matchOver) {
+      return (
+        <div className="d-flex justify-content-center">
+          <button
+            onClick={toggleMatchActive}
+            type="button"
+            className="btn btn-primary c_button"
+          >
+            <p>New Match</p>
+          </button>
+          <button type="button" className="btn btn-primary c_button">
+            <p>Rematch</p>
+          </button>
+        </div>
+      );
+    }
   };
 
   return (
@@ -41,20 +87,13 @@ const Scoreboard = props => {
       tabIndex="0"
     >
       <div className="d-flex justify-content-center c_center">
-        {renderTeam(0)}
+        {renderTeam("blue")}
         <h1 className="centered c_score">
-          {matchData.score[0]} - {matchData.score[1]}
+          {matchData.teams.blue.score} - {matchData.teams.red.score}
         </h1>
-        {renderTeam(1)}
+        {renderTeam("red")}
       </div>
-      <div className="d-flex justify-content-center">
-        <button type="button" className="btn btn-primary c_button">
-          <p>New Match</p>
-        </button>
-        <button type="button" className="btn btn-primary c_button">
-          <p>Rematch</p>
-        </button>
-      </div>
+      {renderNewMatchOptions(matchData.matchOver, toggleMatchActive)}
     </div>
   );
 };

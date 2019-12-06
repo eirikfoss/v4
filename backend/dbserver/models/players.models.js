@@ -10,8 +10,8 @@ const playerSchema = new Schema(
       trim: true,
       minLength: 3
     },
-    rating: { type: Number },
-    matches: { type: Array }
+    matches: { type: Array },
+    stats: { type: Object, required: true }
   },
   { timestamps: true }
 );
