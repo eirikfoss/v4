@@ -1,47 +1,43 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Player from "../player/Player";
 import axios from "axios";
+import {
+  fetchPlayers,
+  handleChosenPlayer
+} from "../../redux/players/player-action";
+import { useSelector, useDispatch } from "react-redux";
+import { createMatch, fetchMatches } from "../../redux/matches/match-action";
 
 const SelectPlayers = props => {
-  let {
-    location,
-    playerListIds,
-    chosenPlayerList,
-    updateChosenPlayers,
-    getPlayerById,
-    startGame
-  } = props;
+  const dispatch = useDispatch();
+  const location = props.location;
 
-  //create a list of players from the db
+  let { players: playerList, chosenPlayers: chosenPlayerList } = useSelector(
+    state => state.playerReducer
+  );
+
+  useEffect(() => {
+    dispatch(fetchPlayers());
+  }, []);
+
+  //render a list of players from the db
   const renderPlayers = () => {
-    return playerListIds.map(currentPlayer => {
+    return playerList.map(currentPlayer => {
       return (
         <Player
-          chosen={() => handleChosenPlayer(currentPlayer)}
-          player={getPlayerById(currentPlayer)}
-          key={currentPlayer}
+          chosen={() => {
+            handleChosen(currentPlayer);
+          }}
+          player={currentPlayer}
+          key={currentPlayer._id}
         />
       );
     });
   };
 
-  //create a list of chosen players
-  const renderChosenPlayers = () => {
-    return chosenPlayerList.map(currentPlayer => {
-      return (
-        <Player
-          chosen={() => handleChosenPlayer(currentPlayer)}
-          player={getPlayerById(currentPlayer)}
-          key={currentPlayer}
-        />
-      );
-    });
-  };
-
-  //Move chosen player from one list to the other
-  const handleChosenPlayer = player => {
+  const handleChosen = player => {
     let cList = chosenPlayerList;
-    let pList = playerListIds;
+    let pList = playerList;
 
     if (pList.includes(player)) {
       if (cList.length <= 3) {
@@ -60,10 +56,26 @@ const SelectPlayers = props => {
 
       pList.push(player);
     }
-    updateChosenPlayers(pList, cList);
+
+    dispatch(handleChosenPlayer(playerList, chosenPlayerList));
   };
 
-  const sendPlayers = () => {
+  //Render a list of chosen players
+  const renderChosenPlayers = () => {
+    return chosenPlayerList.map(currentPlayer => {
+      return (
+        <Player
+          chosen={() => handleChosen(currentPlayer)}
+          player={currentPlayer}
+          key={currentPlayer._id}
+        />
+      );
+    });
+  };
+
+  //Move chosen player from one list to the other
+
+  const startGame = async () => {
     let teams = {
       blue: { players: [], score: 0 },
       red: { players: [], score: 0 }
@@ -72,25 +84,34 @@ const SelectPlayers = props => {
 
     if (chosenPlayerList.length === 4) {
       for (let i = 0; i < 2; i++) {
-        teams.blue.players.push(chosenPlayerList[i]);
+        teams.blue.players.push(chosenPlayerList[i]._id);
       }
 
       for (let i = 2; i < 4; i++) {
-        teams.red.players.push(chosenPlayerList[i]);
+        teams.red.players.push(chosenPlayerList[i]._id);
       }
 
-      axios
+      const matchData = {
+        teams,
+        location,
+        matchOver
+      };
+      console.log(matchData);
+
+      dispatch(createMatch(matchData));
+
+      /*
+      await axios
         .post("http://localhost:5000/matches/add/", {
-          teams,
-          location,
-          matchOver
+          location: { location },
+          teams: { teams }
         })
-        .then(startGame())
+        .then(dispatch(fetchMatches()))
         .catch(error => {
           console.log(error);
         });
+        */
     }
-    startGame();
   };
 
   return (
@@ -108,7 +129,7 @@ const SelectPlayers = props => {
             </table>
           </div>
           <div className="col-sm">
-            <button onClick={sendPlayers} className="btn btn-lg">
+            <button onClick={startGame} className="btn btn-lg">
               Start
             </button>
           </div>

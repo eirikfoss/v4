@@ -3,21 +3,13 @@ import "./_scoreboard.scss";
 import PlayerCard from "../playerCard/PlayerCard";
 
 const Scoreboard = props => {
-  const {
-    matchData,
-    updateScore,
-    playerList,
-    getPlayerById,
-    toggleMatchActive,
-    calculateRatingAdjustment,
-    ratingAdjustment
-  } = props;
-  const { teams } = props.matchData;
+  const { match } = props;
+  const { teams } = props.match;
 
-  async function onKeyPressed(e) {
-    let newMatchData = matchData;
+  function onKeyPressed(e) {
+    let newMatchData = match;
 
-    if (!matchData.matchOver) {
+    if (!match.matchOver) {
       if (e.type === "click") {
         newMatchData.teams.blue.score++;
       } else if (e.type === "contextmenu") {
@@ -31,10 +23,7 @@ const Scoreboard = props => {
         //Match is over
         newMatchData.matchOver = true;
         //calculate new ratings
-        newMatchData.ratingAdjustment = calculateRatingAdjustment(newMatchData);
       }
-
-      await updateScore(newMatchData);
     }
   }
 
@@ -57,7 +46,8 @@ const Scoreboard = props => {
     );
   };
 
-  const renderNewMatchOptions = (matchOver, toggleMatchActive) => {
+  /* 
+ const renderNewMatchOptions = (matchOver, toggleMatchActive) => {
     if (matchOver) {
       return (
         <div className="d-flex justify-content-center">
@@ -75,6 +65,7 @@ const Scoreboard = props => {
       );
     }
   };
+  */
 
   return (
     <div
@@ -89,11 +80,10 @@ const Scoreboard = props => {
       <div className="d-flex justify-content-center c_center">
         {renderTeam("blue")}
         <h1 className="centered c_score">
-          {matchData.teams.blue.score} - {matchData.teams.red.score}
+          {match.teams.blue.score} - {match.teams.red.score}
         </h1>
         {renderTeam("red")}
       </div>
-      {renderNewMatchOptions(matchData.matchOver, toggleMatchActive)}
     </div>
   );
 };

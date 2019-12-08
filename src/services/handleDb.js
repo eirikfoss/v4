@@ -92,9 +92,9 @@ function updateMatchInDb(newMatchData) {
     });
 }
 
-function sendToPrevMatches(matchData) {
+async function sendToPrevMatches(matchData) {
   const match = matchData;
-  axios
+  await axios
     .post("http://localhost:5000/prevMatches/add/", { match })
     .then(response => {
       deleteMatch(match._id);

@@ -1,4 +1,4 @@
-import * as types from "./player-actions";
+import * as types from "./player-action";
 
 const initialState = {
   players: [],
@@ -10,6 +10,7 @@ const initialState = {
     stats: { wins: "", loss: "", rating: "" }
   },
   isLoading: false,
+  chosenPlayers: [],
   error: ""
 };
 
@@ -31,6 +32,17 @@ export const playerReducer = (state = initialState, action) => {
       };
     case types.REMOVE_PLAYER_FAIL:
       return { ...state, isLoading: false, error: action.payload };
+    case types.HANDLE_CHOSEN_REQUEST:
+      return { ...state, isLoading: true };
+    case types.HANDLE_CHOSEN_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        playerList: action.payload.pList,
+        chosenPlayers: action.payload.cList
+      };
+    case types.HANDLE_CHOSEN_FAIL:
+      return { ...state, error: action.payload };
     default:
       return state;
   }

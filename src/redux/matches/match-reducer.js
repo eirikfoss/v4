@@ -1,16 +1,10 @@
 import * as types from "./match-action";
 
 const initialState = {
-  matches: [],
-  match: {
-    _id: "",
-    location: "",
-    teams: {
-      blue: { players: [], score: "" },
-      red: { players: [], score: "" }
-    }
-  },
+  matches: [{ _id: "", location: "" }],
+  match: false,
   isLoading: false,
+  dataLoaded: false,
   error: ""
 };
 
@@ -22,6 +16,28 @@ export const matchReducer = (state = initialState, action) => {
       return { ...state, isLoading: false, matches: action.payload };
     case types.FETCH_MATCHES_FAIL:
       return { ...state, isLoading: false, error: action.payload };
+    case types.FETCH_MATCHBYLOCATION_REQUEST:
+      return { ...state, isLoading: true, dataLoaded: false };
+    case types.FETCH_MATCHBYLOCATION_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        dataLoaded: true,
+        match: action.payload
+      };
+    case types.FETCH_MATCHBYLOCATION_FAIL:
+      return {
+        ...state,
+        isLoading: false,
+        dataLoaded: false,
+        error: action.payload
+      };
+    case types.CREATE_MATCH_REQUEST:
+      return { ...state, isLoading: true };
+    case types.CREATE_MATCH_SUCCESS:
+      return { ...state, isLoading: false, match: action.payload };
+    case types.CREATE_MATCH_FAIL:
+      return { ...state, isLoading: false };
     case types.REMOVE_MATCH_REQUEST:
       return { ...state, isLoading: true };
     case types.REMOVE_MATCH_SUCCESS:

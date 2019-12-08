@@ -1,11 +1,24 @@
-import React, { Component } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchMathces, removeMatch } from "../../shared/matches/match-action";
-import Button from "@material-ui/core/Button";
+import { fetchMatches, removeMatch } from "../../redux/matches/match-action";
+import { fetchPlayers } from "../../redux/players/player-action";
 
-export default class Home extends Component {
-  render() {
-    console.log("Hello World");
-    return <div>Hello World</div>;
-  }
-}
+const Home = () => {
+  const dispatch = useDispatch();
+
+  const { matches } = useSelector(state => state.matchReducer);
+  const { players } = useSelector(state => state.playerReducer);
+
+  useEffect(() => {
+    dispatch(fetchMatches());
+    dispatch(fetchPlayers());
+  }, []);
+
+  return (
+    <div>
+      <h1>Hello World! {matches[0].location}</h1>
+    </div>
+  );
+};
+
+export default Home;
