@@ -14,6 +14,8 @@ const Home = () => {
     dispatch(fetchPlayers());
   }, []);
 
+  console.log(matches);
+
   return (
     <div>
       <h1>Hello World! {matches[0].location}</h1>

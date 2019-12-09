@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import SelectPlayers from "./../selectPlayers/SelectPlayers";
 import { fetchMatchByLocation } from "../../redux/matches/match-action";
+import Scoreboard from "../scoreboard/Scoreboard";
 
 export default function MatchController(props) {
   const dispatch = useDispatch();
@@ -16,12 +17,10 @@ export default function MatchController(props) {
     dispatch(fetchMatchByLocation(location));
   }, []);
 
-  console.log(match);
-
   return (
     <>
-      {match ? (
-        <h1>Match in {match.loction} is live</h1>
+      {match && dataLoaded ? (
+        <Scoreboard />
       ) : (
         <SelectPlayers location={location} />
       )}

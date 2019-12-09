@@ -6,7 +6,7 @@ import {
   handleChosenPlayer
 } from "../../redux/players/player-action";
 import { useSelector, useDispatch } from "react-redux";
-import { createMatch, fetchMatches } from "../../redux/matches/match-action";
+import { createMatch } from "../../redux/matches/match-action";
 
 const SelectPlayers = props => {
   const dispatch = useDispatch();
@@ -84,11 +84,11 @@ const SelectPlayers = props => {
 
     if (chosenPlayerList.length === 4) {
       for (let i = 0; i < 2; i++) {
-        teams.blue.players.push(chosenPlayerList[i]._id);
+        teams.blue.players.push(chosenPlayerList[i]);
       }
 
       for (let i = 2; i < 4; i++) {
-        teams.red.players.push(chosenPlayerList[i]._id);
+        teams.red.players.push(chosenPlayerList[i]);
       }
 
       const matchData = {

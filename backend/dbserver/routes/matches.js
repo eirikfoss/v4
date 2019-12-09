@@ -20,7 +20,7 @@ router.route("/add").post((req, res) => {
 
   newMatch
     .save()
-    .then(() => res.json(newMatch._id))
+    .then(() => res.json(newMatch))
     .catch(err => res.status(400).json("Error: " + err));
 });
 

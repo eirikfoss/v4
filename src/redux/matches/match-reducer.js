@@ -5,6 +5,7 @@ const initialState = {
   match: false,
   isLoading: false,
   dataLoaded: false,
+  matchReady: false,
   error: ""
 };
 
@@ -37,6 +38,12 @@ export const matchReducer = (state = initialState, action) => {
     case types.CREATE_MATCH_SUCCESS:
       return { ...state, isLoading: false, match: action.payload };
     case types.CREATE_MATCH_FAIL:
+      return { ...state, isLoading: false };
+    case types.UPDATE_MATCH_REQUEST:
+      return { ...state, isLoading: true };
+    case types.UPDATE_MATCH_SUCCESS:
+      return { ...state, isLoading: false, match: action.payload };
+    case types.UPDATE_MATCH_FAIL:
       return { ...state, isLoading: false };
     case types.REMOVE_MATCH_REQUEST:
       return { ...state, isLoading: true };

@@ -2,10 +2,8 @@ import React from "react";
 import "./_playerCard.scss";
 
 const PlayerCard = props => {
-  const { id, getPlayerById } = props;
-  let playerTmp = { username: "Bobo", stats: { rating: 1500 } };
-
-  const player = getPlayerById(id) ? getPlayerById(id) : playerTmp;
+  let { player } = props;
+  const tmpPlayer = { username: "Bobo", stats: { rating: 1500 } };
 
   return (
     <div className="card c_margin" style={{ width: "12rem" }}>

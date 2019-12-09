@@ -1,10 +1,11 @@
 import React from "react";
 import "./_scoreboard.scss";
 import PlayerCard from "../playerCard/PlayerCard";
+import { useSelector } from "react-redux";
 
-const Scoreboard = props => {
-  const { match } = props;
-  const { teams } = props.match;
+const Scoreboard = () => {
+  let { match } = useSelector(state => state.matchReducer);
+  let bScore = match.teams.blue.score;
 
   function onKeyPressed(e) {
     let newMatchData = match;
@@ -12,6 +13,7 @@ const Scoreboard = props => {
     if (!match.matchOver) {
       if (e.type === "click") {
         newMatchData.teams.blue.score++;
+        console.log(newMatchData.teams.blue.score);
       } else if (e.type === "contextmenu") {
         newMatchData.teams.red.score++;
       }
@@ -28,20 +30,12 @@ const Scoreboard = props => {
   }
 
   const renderTeam = team => {
-    let t = team === "blue" ? teams.blue : teams.red;
+    let t = team === "blue" ? match.teams.blue : match.teams.red;
 
     return (
       <div className="d-flex justify-content-center">
-        <PlayerCard
-          id={t.players[0]}
-          playerList={playerList}
-          getPlayerById={getPlayerById}
-        />
-        <PlayerCard
-          id={t.players[1]}
-          playerList={playerList}
-          getPlayerById={getPlayerById}
-        />
+        <PlayerCard player={t.players[0]} />
+        <PlayerCard player={t.players[1]} />
       </div>
     );
   };
@@ -77,13 +71,7 @@ const Scoreboard = props => {
       }}
       tabIndex="0"
     >
-      <div className="d-flex justify-content-center c_center">
-        {renderTeam("blue")}
-        <h1 className="centered c_score">
-          {match.teams.blue.score} - {match.teams.red.score}
-        </h1>
-        {renderTeam("red")}
-      </div>
+      {renderTeam("blue")}
     </div>
   );
 };

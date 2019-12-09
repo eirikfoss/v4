@@ -9,6 +9,10 @@ export const CREATE_MATCH_REQUEST = "CREATE_MATCH_REQUEST";
 export const CREATE_MATCH_SUCCESS = "CREATE_MATCH_SUCCESS";
 export const CREATE_MATCH_FAIL = "CREATE_MATCH_FAIL";
 
+export const UPDATE_MATCH_REQUEST = "UPDATE_MATCH_REQUEST";
+export const UPDATE_MATCH_SUCCESS = "UPDATE_MATCH_SUCCESS";
+export const UPDATE_MATCH_FAIL = "UPDATE_MATCH_FAIL";
+
 export const FETCH_MATCHBYLOCATION_REQUEST = "FETCH_MATCHBYLOCATION_REQUEST";
 export const FETCH_MATCHBYLOCATION_SUCCESS = "FETCH_MATCHBYLOCATION_SUCCESS";
 export const FETCH_MATCHBYLOCATION_FAIL = "FETCH_MATCHBYLOCATION_FAIL";
@@ -52,6 +56,27 @@ export const createMatch = matchData => {
       alert(e.message);
       dispatch({
         type: CREATE_MATCH_FAIL,
+        payload: e.message
+      });
+    }
+  };
+};
+
+export const updateMatch = (matchData, matchId) => {
+  return async dispatch => {
+    dispatch({
+      type: UPDATE_MATCH_REQUEST
+    });
+    try {
+      console.log(matchData);
+      const { data } = await postMatch(matchData, matchId);
+
+      dispatch({ type: UPDATE_MATCH_SUCCESS, payload: data });
+    } catch (e) {
+      console.log(e.message);
+      alert(e.message);
+      dispatch({
+        type: UPDATE_MATCH_FAIL,
         payload: e.message
       });
     }
