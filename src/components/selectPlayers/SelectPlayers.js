@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import Player from "../player/Player";
-import axios from "axios";
 import {
   fetchPlayers,
   handleChosenPlayer
@@ -20,7 +19,7 @@ const SelectPlayers = props => {
     dispatch(fetchPlayers());
   }, []);
 
-  //render a list of players from the db
+  //render a list of players
   const renderPlayers = () => {
     return playerList.map(currentPlayer => {
       return (
@@ -96,21 +95,8 @@ const SelectPlayers = props => {
         location,
         matchOver
       };
-      console.log(matchData);
 
       dispatch(createMatch(matchData));
-
-      /*
-      await axios
-        .post("http://localhost:5000/matches/add/", {
-          location: { location },
-          teams: { teams }
-        })
-        .then(dispatch(fetchMatches()))
-        .catch(error => {
-          console.log(error);
-        });
-        */
     }
   };
 

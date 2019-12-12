@@ -9,21 +9,11 @@ export default function MatchController(props) {
   const dispatch = useDispatch();
   const location = props.location;
 
-  let { match, isLoading, dataLoaded } = useSelector(
-    state => state.matchReducer
-  );
+  let { match } = useSelector(state => state.matchReducer);
 
   useEffect(() => {
     dispatch(fetchMatchByLocation(location));
   }, []);
 
-  return (
-    <>
-      {match && dataLoaded ? (
-        <Scoreboard />
-      ) : (
-        <SelectPlayers location={location} />
-      )}
-    </>
-  );
+  return <>{match ? <Scoreboard /> : <SelectPlayers location={location} />}</>;
 }
