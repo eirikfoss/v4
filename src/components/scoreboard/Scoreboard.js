@@ -1,11 +1,12 @@
 import React from "react";
 import "./_scoreboard.scss";
 import PlayerCard from "../playerCard/PlayerCard";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { updateMatch } from "../../redux/matches/match-action";
 
 const Scoreboard = () => {
   let { match } = useSelector(state => state.matchReducer);
-  let bScore = match.teams.blue.score;
+  const dispatch = useDispatch();
 
   function onKeyPressed(e) {
     let newMatchData = match;
@@ -16,6 +17,7 @@ const Scoreboard = () => {
         console.log(newMatchData.teams.blue.score);
       } else if (e.type === "contextmenu") {
         newMatchData.teams.red.score++;
+        console.log(newMatchData.teams.red.score);
       }
 
       if (
@@ -24,8 +26,12 @@ const Scoreboard = () => {
       ) {
         //Match is over
         newMatchData.matchOver = true;
+
         //calculate new ratings
       }
+
+      //update match
+      dispatch(updateMatch(newMatchData));
     }
   }
 
@@ -72,6 +78,9 @@ const Scoreboard = () => {
       tabIndex="0"
     >
       {renderTeam("blue")}
+      <h1>
+        {match.teams.blue.score} - {match.teams.red.score}
+      </h1>
     </div>
   );
 };

@@ -39,10 +39,11 @@ router.route("/:id").delete((req, res) => {
 router.route("/update/:id").post((req, res) => {
   Match.findById(req.params.id).then(match => {
     match.teams = req.body.teams;
+    match.matchOver = req.body.matchOver;
 
     match
       .save()
-      .then(() => res.json("Match updated"))
+      .then(() => res.json(match))
       .catch(err => res.status(400).json("Error: " + err));
   });
 });

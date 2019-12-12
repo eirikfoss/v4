@@ -1,4 +1,4 @@
-import { getMatches, postMatch, deleteMatch } from "./match-service";
+import { getMatches, postMatch, deleteMatch, updMatch } from "./match-service";
 
 /* action types */
 export const FETCH_MATCHES_REQUEST = "FETCH_MATCHES_REQUEST";
@@ -62,14 +62,13 @@ export const createMatch = matchData => {
   };
 };
 
-export const updateMatch = (matchData, matchId) => {
+export const updateMatch = matchData => {
   return async dispatch => {
     dispatch({
       type: UPDATE_MATCH_REQUEST
     });
     try {
-      console.log(matchData);
-      const { data } = await postMatch(matchData, matchId);
+      const { data } = await updMatch(matchData);
 
       dispatch({ type: UPDATE_MATCH_SUCCESS, payload: data });
     } catch (e) {

@@ -10,7 +10,9 @@ export async function deleteMatch(id) {
 }
 
 export async function postMatch(matchData) {
-  return await http.post("http://localhost:5000/matches/add/", matchData);
+  return await http.post(`${dbUrl.matches}add/`, matchData);
 }
 
-export async function updateMatch(matchData, matchId) {}
+export async function updMatch(matchData) {
+  return await http.post(`${dbUrl.matches}update/${matchData._id}`, matchData);
+}
