@@ -35,6 +35,49 @@ const Scoreboard = () => {
     }
   }
 
+  /*
+calculateRatingAdjustment = matchData => {
+    //const blueRating = 1000;
+    //const redRating = 1000;
+    const blueRating = this.getTeamRating(matchData.teams.blue);
+    const redRating = this.getTeamRating(matchData.teams.red);
+    const scoreBlue = matchData.teams.blue.score;
+    const scoreRed = matchData.teams.red.score;
+
+    const ratingFactor = 1000;
+
+    const expectedBlue =
+      1 / (1 + Math.pow(10, (redRating - blueRating) / ratingFactor));
+    const expectedRed =
+      1 / (1 + Math.pow(10, (blueRating - redRating) / ratingFactor));
+
+    console.log("Expected blue: " + expectedBlue);
+
+    const newRatingBlue =
+      scoreBlue > scoreRed
+        ? Math.round(blueRating + 100 * (10 / (10 + scoreRed) - expectedBlue))
+        : Math.round(
+            blueRating + 100 * (1 - 10 / (10 + scoreBlue) - expectedBlue)
+          );
+
+    const newRatingRed =
+      scoreRed > scoreBlue
+        ? Math.round(redRating + 100 * (10 / (10 + scoreBlue) - expectedRed))
+        : Math.round(
+            redRating + 100 * (1 - 10 / (10 + scoreRed) - expectedRed)
+          );
+    const adjustmentBlue = blueRating - newRatingBlue;
+    const adjustmentRed = redRating - newRatingRed;
+
+    const ratingAdjustments = { blue: adjustmentBlue, red: adjustmentRed };
+
+    return ratingAdjustments;
+  };
+
+  
+
+  */
+
   const renderTeam = team => {
     let t = team === "blue" ? match.teams.blue : match.teams.red;
 
