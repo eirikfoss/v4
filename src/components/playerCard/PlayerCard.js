@@ -3,7 +3,6 @@ import "./_playerCard.scss";
 
 const PlayerCard = props => {
   let { player } = props;
-  const tmpPlayer = { username: "Bobo", stats: { rating: 1500 } };
 
   return (
     <div className="card c_margin" style={{ width: "12rem" }}>
