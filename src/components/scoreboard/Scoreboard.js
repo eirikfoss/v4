@@ -2,10 +2,12 @@ import React from "react";
 import "./_scoreboard.scss";
 import PlayerCard from "../playerCard/PlayerCard";
 import { useSelector, useDispatch } from "react-redux";
-import { updateMatch } from "../../redux/matches/match-action";
+import { updateMatch, removeMatch } from "../../redux/matches/match-action";
+import { updatePlayer } from "./../../redux/players/player-action";
+import { sendToPrevMatches } from "../../redux/prevMatches/prevMatch-action";
 
 const Scoreboard = () => {
-  let { match } = useSelector(state => state.matchReducer);
+  let { match, matchOver } = useSelector(state => state.matchReducer);
   const dispatch = useDispatch();
 
   function onKeyPressed(e) {
@@ -15,10 +17,8 @@ const Scoreboard = () => {
     if (!match.matchOver) {
       if (e.type === "click") {
         newMatchData.teams.blue.score++;
-        console.log("Blue Score: " + newMatchData.teams.blue.score);
       } else if (e.type === "contextmenu") {
         newMatchData.teams.red.score++;
-        console.log("Red Score: " + newMatchData.teams.red.score);
       }
 
       if (
@@ -30,10 +30,25 @@ const Scoreboard = () => {
 
         //calculate new ratings
         ratingAdjustments = calculateRatingAdjustment();
+
+        //Update match
+        dispatch(updateMatch(newMatchData));
+
+        //send players to db
+        sendPlayers(newMatchData.teams, ratingAdjustments);
+
+        //send match to prevMatches
+        dispatch(sendToPrevMatches(newMatchData));
+
+        //Delete match from live matches
+        dispatch(removeMatch(match));
       }
 
       //update match
-      dispatch(updateMatch(newMatchData));
+
+      if (!matchOver) {
+        dispatch(updateMatch(newMatchData));
+      }
     }
   }
 
@@ -89,6 +104,27 @@ const Scoreboard = () => {
     return adjustments;
   };
 
+  const sendPlayers = (teams, ratingAdjustments) => {
+    const blueTeam = teams.blue;
+    const redTeam = teams.red;
+
+    for (let i = 0; i < 2; i++) {
+      blueTeam.players[i].stats.rating += ratingAdjustments.blue;
+      redTeam.players[i].stats.rating += ratingAdjustments.red;
+
+      if (match.teams.blue.score === 10) {
+        blueTeam.players[i].stats.wins++;
+        redTeam.players[i].stats.loss++;
+      } else {
+        blueTeam.players[i].stats.loss++;
+        redTeam.players[i].stats.wins++;
+      }
+
+      dispatch(updatePlayer(blueTeam.players[i]));
+      dispatch(updatePlayer(redTeam.players[i]));
+    }
+  };
+
   const renderTeam = team => {
     let t = team === "blue" ? match.teams.blue : match.teams.red;
 
@@ -106,26 +142,18 @@ const Scoreboard = () => {
     );
   };
 
-  /* 
- const renderNewMatchOptions = (matchOver, toggleMatchActive) => {
-    if (matchOver) {
-      return (
-        <div className="d-flex justify-content-center">
-          <button
-            onClick={toggleMatchActive}
-            type="button"
-            className="btn btn-primary c_button"
-          >
-            <p>New Match</p>
-          </button>
-          <button type="button" className="btn btn-primary c_button">
-            <p>Rematch</p>
-          </button>
-        </div>
-      );
-    }
+  const renderNewMatchOptions = () => {
+    return (
+      <div className="d-flex justify-content-center">
+        <button type="button" className="btn btn-primary c_button">
+          <p>New Match</p>
+        </button>
+        <button type="button" className="btn btn-primary c_button">
+          <p>Rematch</p>
+        </button>
+      </div>
+    );
   };
-  */
 
   return (
     <div
@@ -141,6 +169,7 @@ const Scoreboard = () => {
       <h1>
         {match.teams.blue.score} - {match.teams.red.score}
       </h1>
+      {matchOver ? renderNewMatchOptions() : <div></div>}
     </div>
   );
 };

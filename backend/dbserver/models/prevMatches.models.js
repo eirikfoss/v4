@@ -4,7 +4,9 @@ const Schema = mongoose.Schema;
 
 const prevMatchSchema = new Schema(
   {
-    match: { type: Object }
+    location: { type: String },
+    teams: { type: Object },
+    matchOver: { type: Boolean }
   },
   { timestamps: true }
 );

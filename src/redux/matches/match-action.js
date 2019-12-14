@@ -47,7 +47,6 @@ export const createMatch = matchData => {
       type: CREATE_MATCH_REQUEST
     });
     try {
-      console.log(matchData);
       const { data } = await postMatch(matchData);
 
       dispatch({ type: CREATE_MATCH_SUCCESS, payload: data });

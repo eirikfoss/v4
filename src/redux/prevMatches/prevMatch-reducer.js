@@ -1,7 +1,7 @@
 import * as types from "./match-action";
 
 const initialState = {
-  matches: [],
+  prevMatches: [],
   match: {
     _id: "",
     location: "",
@@ -11,6 +11,7 @@ const initialState = {
     }
   },
   isLoading: false,
+  prevMatchId: "",
   error: ""
 };
 
@@ -21,6 +22,12 @@ export const matchReducer = (state = initialState, action) => {
     case types.FETCH_MATCHES_SUCCESS:
       return { ...state, isLoading: false, matches: action.payload };
     case types.FETCH_MATCHES_FAIL:
+      return { ...state, isLoading: false, error: action.payload };
+    case types.ADD_PREV_MATCHES_REQUEST:
+      return { ...state, isLoading: true };
+    case types.ADD_PREV_MATCHES_SUCCESS:
+      return { ...state, isLoading: false, prevMatchId: action.payload._id };
+    case types.ADD_PREV_MATCHES_FAIL:
       return { ...state, isLoading: false, error: action.payload };
     case types.REMOVE_MATCH_REQUEST:
       return { ...state, isLoading: true };

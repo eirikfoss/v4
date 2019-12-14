@@ -5,8 +5,8 @@ export async function getMatches() {
   return await http.get(dbUrl.matches);
 }
 
-export async function deleteMatch(id) {
-  return await http.delete(`${dbUrl.matches}${id}`);
+export async function deleteMatch(match) {
+  return await http.delete(`${dbUrl.matches}${match._id}`);
 }
 
 export async function postMatch(matchData) {

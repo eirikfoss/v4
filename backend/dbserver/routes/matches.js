@@ -18,6 +18,7 @@ router.route("/add").post((req, res) => {
     matchOver
   });
 
+  console.log(req.body);
   newMatch
     .save()
     .then(() => res.json(newMatch))

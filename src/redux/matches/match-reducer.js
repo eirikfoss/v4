@@ -3,6 +3,7 @@ import * as types from "./match-action";
 const initialState = {
   matches: [{ _id: "", location: "" }],
   match: false,
+  matchOver: false,
   isLoading: false,
   dataLoaded: false,
   matchReady: false,
@@ -51,6 +52,7 @@ export const matchReducer = (state = initialState, action) => {
       return {
         ...state,
         matches: state.matches.filter(match => match.id !== action.payload),
+        matchOver: true,
         isLoading: false
       };
     case types.REMOVE_MATCH_FAIL:

@@ -27,10 +27,19 @@ export const playerReducer = (state = initialState, action) => {
     case types.REMOVE_PLAYER_SUCCESS:
       return {
         ...state,
-        players: state.players.filter(player => player.id !== action.payload),
         isLoading: false
       };
     case types.REMOVE_PLAYER_FAIL:
+      return { ...state, isLoading: false, error: action.payload };
+    case types.UPDATE_PLAYER_REQUEST:
+      return { ...state, isLoading: true };
+    case types.UPDATE_PLAYER_SUCCESS:
+      return {
+        ...state,
+        players: state.players.filter(player => player.id !== action.payload),
+        isLoading: false
+      };
+    case types.UPDATE_PLAYER_FAIL:
       return { ...state, isLoading: false, error: action.payload };
     case types.HANDLE_CHOSEN_REQUEST:
       return { ...state, isLoading: true };

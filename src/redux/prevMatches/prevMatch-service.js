@@ -1,10 +1,14 @@
 import http from "../../http-service";
 import { dbUrl } from "../../api-config";
 
-export async function getMatches() {
-  return await http.get(dbUrl.matches);
+export async function getPrevMatches() {
+  return await http.get(dbUrl.prevMatches);
 }
 
-export async function deletePlayer(id) {
-  return await http.delete(`${dbUrl.matches}${id}`);
+export async function addToPrevMatches(match) {
+  return await http.post(`${dbUrl.prevMatches}add/`, match);
+}
+
+export async function deletePrevMatch(id) {
+  return await http.delete(`${dbUrl.prevMatches}${id}`);
 }

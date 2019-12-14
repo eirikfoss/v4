@@ -8,15 +8,15 @@ router.route("/").get((req, res) => {
 });
 
 router.route("/add").post((req, res) => {
-  const match = req.body.match;
+  const teams = req.body.teams;
+  const location = req.body.location;
+  const matchOver = req.body.matchOver;
 
-  const newMatch = new PrevMatch({
-    match
-  });
+  const newMatch = new PrevMatch({ teams, location, matchOver });
 
   newMatch
     .save()
-    .then(() => res.json(newMatch._id))
+    .then(() => res.json(newMatch))
     .catch(err => res.status(400).json("Error: " + err));
 });
 
