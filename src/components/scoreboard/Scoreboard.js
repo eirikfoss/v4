@@ -30,10 +30,6 @@ const Scoreboard = () => {
 
         //calculate new ratings
         ratingAdjustments = calculateRatingAdjustment();
-
-        console.log(calculateExpectedScore());
-        console.log(calculateTeamRating(match.teams.blue));
-        console.log(ratingAdjustments);
       }
 
       //update match
