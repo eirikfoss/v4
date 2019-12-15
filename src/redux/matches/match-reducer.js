@@ -13,11 +13,21 @@ const initialState = {
 export const matchReducer = (state = initialState, action) => {
   switch (action.type) {
     case types.FETCH_MATCHES_REQUEST:
-      return { ...state, isLoading: true };
+      return { ...state, isLoading: true, dataLoaded: false };
     case types.FETCH_MATCHES_SUCCESS:
-      return { ...state, isLoading: false, matches: action.payload };
+      return {
+        ...state,
+        isLoading: false,
+        matches: action.payload,
+        dataLoaded: true
+      };
     case types.FETCH_MATCHES_FAIL:
-      return { ...state, isLoading: false, error: action.payload };
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload,
+        dataLoaded: false
+      };
     case types.FETCH_MATCHBYLOCATION_REQUEST:
       return { ...state, isLoading: true, dataLoaded: false };
     case types.FETCH_MATCHBYLOCATION_SUCCESS:
